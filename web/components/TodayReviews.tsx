@@ -26,6 +26,13 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
     }
   };
 
+  // 生成力扣题目链接
+  const getLeetCodeUrl = (problem: Problem) => {
+    const leetCodeDomain = 'https://leetcode.cn'; // 默认使用中文站
+    // 使用题目ID进行搜索，通常能直接找到对应题目
+    return `${leetCodeDomain}/problemset/all/?search=${problem.problem_id}`;
+  };
+
   useEffect(() => {
     // 每小时自动刷新一次
     const interval = setInterval(refreshReviews, 3600000);
@@ -99,7 +106,18 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
               <tr key={problem.problem_id} className="hover:bg-red-100">
                 <td className="px-4 py-3">
                   <div className="font-medium text-gray-900">
-                    {problem.problem_id}. {problem.title}
+                    <a
+                      href={getLeetCodeUrl(problem)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                      title="点击跳转到力扣题目页面"
+                    >
+                      {problem.problem_id}. {problem.title}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
                   </div>
                 </td>
                 <td className="px-4 py-3">

@@ -26,11 +26,37 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
     }
   };
 
+  // 中文题目名到 LeetCode slug 的映射
+  const getLeetCodeSlug = (title: string): string => {
+    const slugMap: Record<string, string> = {
+      '两数之和': 'two-sum',
+      '两数相加': 'add-two-numbers',
+      '无重复字符的最长子串': 'longest-substring-without-repeating-characters',
+      '寻找两个正序数组的中位数': 'median-of-two-sorted-arrays',
+      '正则表达式匹配': 'regular-expression-matching',
+      // 可以继续添加更多映射
+    };
+
+    // 如果映射中存在，直接返回
+    if (slugMap[title]) {
+      return slugMap[title];
+    }
+
+    // 否则生成一个简单的 slug（移除标点，用横杠连接小写字母）
+    // 这里只是一个简单示例，建议逐步完善映射表
+    const simpleSlug = title
+      .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, ' ') // 非中文、字母、数字替换为空格
+      .replace(/\s+/g, '-') // 空格转横杠
+      .toLowerCase();
+
+    return simpleSlug || 'problem';
+  };
+
   // 生成力扣题目链接
   const getLeetCodeUrl = (problem: Problem) => {
     const leetCodeDomain = 'https://leetcode.cn'; // 默认使用中文站
-    // 使用题目ID进行搜索，通常能直接找到对应题目
-    return `${leetCodeDomain}/problemset/all/?search=${problem.problem_id}`;
+    const slug = getLeetCodeSlug(problem.title);
+    return `${leetCodeDomain}/problems/${slug}/`;
   };
 
   useEffect(() => {
@@ -131,14 +157,20 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${problem.stage === 0
-                      ? 'bg-blue-100 text-blue-800'
-                      : problem.stage === 1
-                        ? 'bg-green-100 text-green-800'
-                        : problem.stage === 2
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-orange-100 text-orange-800'
-                                    }`}>
+                  <span
+                    className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${problem.stage === 0
+                        ? 'bg-blue-100 text-blue-800'
+                        : problem.stage === 1
+                          ? 'bg-green-100 text-green-800'
+                          : problem.stage === 2
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-orange-100 text-orange-800'
+                      }`}
+                    title={problem.stage === 0 ? '初次接触' :
+                           problem.stage === 1 ? '1天后复习' :
+                           problem.stage === 2 ? '7天后复习' :
+                           '20天后复习'}
+                  >
                     阶段 {problem.stage}
                   </span>
                 </td>

@@ -74,16 +74,42 @@ export default function ProblemItem({ problem, onReviewComplete }: ProblemItemPr
     }
   };
 
+  // 中文题目名到 LeetCode slug 的映射
+  const getLeetCodeSlug = (title: string): string => {
+    const slugMap: Record<string, string> = {
+      '两数之和': 'two-sum',
+      '两数相加': 'add-two-numbers',
+      '无重复字符的最长子串': 'longest-substring-without-repeating-characters',
+      '寻找两个正序数组的中位数': 'median-of-two-sorted-arrays',
+      '正则表达式匹配': 'regular-expression-matching',
+      // 可以继续添加更多映射
+    };
+
+    // 如果映射中存在，直接返回
+    if (slugMap[title]) {
+      return slugMap[title];
+    }
+
+    // 否则生成一个简单的 slug（移除标点，用横杠连接小写字母）
+    // 这里只是一个简单示例，建议逐步完善映射表
+    const simpleSlug = title
+      .replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, ' ') // 非中文、字母、数字替换为空格
+      .replace(/\s+/g, '-') // 空格转横杠
+      .toLowerCase();
+
+    return simpleSlug || 'problem';
+  };
+
   // 生成力扣题目链接
   const getLeetCodeUrl = (problem: Problem) => {
     const leetCodeDomain = 'https://leetcode.cn'; // 默认使用中文站
-    // 使用题目ID进行搜索，通常能直接找到对应题目
-    return `${leetCodeDomain}/problemset/all/?search=${problem.problem_id}`;
+    const slug = getLeetCodeSlug(problem.title);
+    return `${leetCodeDomain}/problems/${slug}/`;
   };
 
   return (
     <tr id={`problem-${problem.problem_id}`} className="hover:bg-gray-50">
-      <td className="px-4 py-4 whitespace-nowrap">
+      <td className="px-4 py-3 whitespace-nowrap">
         <div className="flex items-center">
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900">
@@ -106,26 +132,24 @@ export default function ProblemItem({ problem, onReviewComplete }: ProblemItemPr
           </div>
         </div>
       </td>
-      <td className="px-4 py-4 whitespace-nowrap">
+      <td className="px-4 py-3 whitespace-nowrap">
         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getDifficultyColor(problem.difficulty)}`}>
           {problem.difficulty}
         </span>
       </td>
-      <td className="px-4 py-4 whitespace-nowrap">
-        <div className="flex items-center">
-          <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${getStageColor(problem.stage)}`}>
-            阶段 {problem.stage}
-          </span>
-          <div className="ml-3 text-xs text-gray-500">
-            {problem.stage === 0 && '初次接触'}
-            {problem.stage === 1 && '1天后复习'}
-            {problem.stage === 2 && '7天后复习'}
-            {problem.stage === 3 && '20天后复习'}
-            {problem.stage === 4 && '已掌握'}
-          </div>
-        </div>
+      <td className="px-4 py-3 whitespace-nowrap">
+        <span
+          className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${getStageColor(problem.stage)}`}
+          title={problem.stage === 0 ? '初次接触' :
+                 problem.stage === 1 ? '1天后复习' :
+                 problem.stage === 2 ? '7天后复习' :
+                 problem.stage === 3 ? '20天后复习' :
+                 '已掌握'}
+        >
+          阶段 {problem.stage}
+        </span>
       </td>
-      <td className="px-4 py-4 whitespace-nowrap">
+      <td className="px-4 py-3 whitespace-nowrap">
         <div className="text-sm text-gray-900 font-medium">
           {formatDate(problem.next_review_date)}
         </div>
@@ -133,7 +157,7 @@ export default function ProblemItem({ problem, onReviewComplete }: ProblemItemPr
           <div className="text-xs text-red-600 font-medium">需要复习!</div>
         )}
       </td>
-      <td className="px-4 py-4 whitespace-nowrap">
+      <td className="px-4 py-3 whitespace-nowrap">
         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${problem.status === 'completed'
             ? 'bg-purple-100 text-purple-800'
             : 'bg-blue-100 text-blue-800'
@@ -141,7 +165,7 @@ export default function ProblemItem({ problem, onReviewComplete }: ProblemItemPr
           {problem.status === 'completed' ? '✅ 已掌握' : '🔄 进行中'}
         </span>
       </td>
-      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+      <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
         {problem.status === 'active' && (
           <div className="flex space-x-2">
             {!isReviewing ? (

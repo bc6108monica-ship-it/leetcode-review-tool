@@ -34,6 +34,26 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
       '无重复字符的最长子串': 'longest-substring-without-repeating-characters',
       '寻找两个正序数组的中位数': 'median-of-two-sorted-arrays',
       '正则表达式匹配': 'regular-expression-matching',
+      '反转链表': 'reverse-linked-list',
+      '有效的括号': 'valid-parentheses',
+      '合并两个有序链表': 'merge-two-sorted-lists',
+      '二叉树的中序遍历': 'binary-tree-inorder-traversal',
+      '爬楼梯': 'climbing-stairs',
+      '买卖股票的最佳时机': 'best-time-to-buy-and-sell-stock',
+      '最大子序和': 'maximum-subarray',
+      '打家劫舍': 'house-robber',
+      '乘积最大子数组': 'maximum-product-subarray',
+      '最长递增子序列': 'longest-increasing-subsequence',
+      '三数之和': '3sum',
+      '盛最多水的容器': 'container-with-most-water',
+      '电话号码的字母组合': 'letter-combinations-of-a-phone-number',
+      '括号生成': 'generate-parentheses',
+      '合并K个升序链表': 'merge-k-sorted-lists',
+      '下一个排列': 'next-permutation',
+      '搜索旋转排序数组': 'search-in-rotated-sorted-array',
+      '在排序数组中查找元素的第一个和最后一个位置': 'find-first-and-last-position-of-element-in-sorted-array',
+      '组合总和': 'combination-sum',
+      '全排列': 'permutations',
       // 可以继续添加更多映射
     };
 
@@ -79,7 +99,7 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
           <button
             onClick={refreshReviews}
             disabled={isRefreshing}
-            className="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200 disabled:opacity-50"
+            className="px-4 py-4 bg-green-100 text-green-700 rounded-md hover:bg-green-200 disabled:opacity-50"
           >
             {isRefreshing ? '刷新中...' : '刷新'}
           </button>
@@ -104,13 +124,13 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
           <button
             onClick={refreshReviews}
             disabled={isRefreshing}
-            className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 disabled:opacity-50"
+            className="px-4 py-4 bg-red-100 text-red-700 rounded-md hover:bg-red-200 disabled:opacity-50"
           >
             {isRefreshing ? '刷新中...' : '刷新'}
           </button>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-white text-red-700 border border-red-300 rounded-md hover:bg-red-50"
+            className="px-4 py-4 bg-white text-red-700 border border-red-300 rounded-md hover:bg-red-50"
           >
             查看全部
           </button>
@@ -121,16 +141,16 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
         <table className="min-w-full divide-y divide-red-200">
           <thead>
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">题目</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">难度</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">当前阶段</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-red-700 uppercase tracking-wider">操作</th>
+              <th className="px-4 py-4 text-left text-xs font-medium text-red-700 uppercase tracking-wider">题目</th>
+              <th className="px-4 py-4 text-left text-xs font-medium text-red-700 uppercase tracking-wider">难度</th>
+              <th className="px-4 py-4 text-left text-xs font-medium text-red-700 uppercase tracking-wider">当前阶段</th>
+              <th className="px-4 py-4 text-left text-xs font-medium text-red-700 uppercase tracking-wider">操作</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-red-100">
             {reviews.map((problem) => (
               <tr key={problem.problem_id} className="hover:bg-red-100">
-                <td className="px-4 py-3">
+                <td className="px-4 py-4">
                   <div className="font-medium text-gray-900">
                     <a
                       href={getLeetCodeUrl(problem)}
@@ -146,7 +166,7 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
                     </a>
                   </div>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${problem.difficulty === '简单'
                       ? 'bg-green-100 text-green-800'
                       : problem.difficulty === '中等'
@@ -156,7 +176,7 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
                     {problem.difficulty}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4">
                   <span
                     className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${problem.stage === 0
                         ? 'bg-blue-100 text-blue-800'
@@ -174,7 +194,7 @@ export default function TodayReviews({ initialReviews }: TodayReviewsProps) {
                     阶段 {problem.stage}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4">
                   <button
                     onClick={() => {
                       // 滚动到对应题目

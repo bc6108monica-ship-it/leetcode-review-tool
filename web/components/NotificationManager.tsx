@@ -3,12 +3,17 @@
 import { useEffect, useState } from 'react';
 
 export default function NotificationManager() {
+  const [isClient, setIsClient] = useState(false);
   const [permission, setPermission] = useState<NotificationPermission>('default');
   const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
     // 只在客户端执行
-    if (typeof window === 'undefined') return;
+    if (!isClient) return;
 
     // 检查通知权限
     if ('Notification' in window) {
@@ -50,10 +55,10 @@ export default function NotificationManager() {
     // 每小时检查一次
     const interval = setInterval(checkAndNotify, 3600000);
     return () => clearInterval(interval);
-  }, [permission]);
+  }, [permission, isClient]);
 
   const requestPermission = () => {
-    if (typeof window === 'undefined' || !('Notification' in window)) {
+    if (!isClient || !('Notification' in window)) {
       alert('您的浏览器不支持通知功能。');
       return;
     }
@@ -71,7 +76,7 @@ export default function NotificationManager() {
     });
   };
 
-  if (typeof window === 'undefined' || !('Notification' in window)) {
+  if (!isClient || !('Notification' in window)) {
     return null;
   }
 
